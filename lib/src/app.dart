@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'config.dart';
+import 'init.dart';
 
 class EaziRide extends StatelessWidget {
   const EaziRide({super.key});
@@ -7,14 +12,21 @@ class EaziRide extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData(
       useMaterial3: false,
-      primaryColor: Colors.teal,
-      // textTheme: 
+      primaryColor: colorPrimary,
+      textTheme: GoogleFonts.spaceGroteskTextTheme()
     );
 
-    return MaterialApp(
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'EaziRide',
       theme: theme,
       initialRoute: '/',
+      getPages: [
+        GetPage(
+          name: '/',
+          page: () => Init()
+        )
+      ],
     );
   }
 }
