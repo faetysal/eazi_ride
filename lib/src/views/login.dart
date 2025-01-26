@@ -1,7 +1,10 @@
 import 'package:eazi_ride/src/components/button.dart';
 import 'package:eazi_ride/src/components/input.dart';
+import 'package:eazi_ride/src/config.dart';
+import 'package:eazi_ride/src/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -11,7 +14,6 @@ class Login extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.red)),
           padding: const EdgeInsets.fromLTRB(16, kToolbarHeight + 24, 16, 16),
           height: MediaQuery.of(context).size.height,
           child: Column(
@@ -23,7 +25,7 @@ class Login extends StatelessWidget {
               ), textAlign: TextAlign.center),
               const SizedBox(height: 16),
               Container(
-                height: 270,
+                height: 250,
                 // color: Colors.red,
                 child: SvgPicture.asset('assets/svg/login.svg', fit: BoxFit.cover,)
               ),
@@ -47,7 +49,7 @@ class Login extends StatelessWidget {
                         child: Input(
                           placeholder: 'Enter password',
                           obscureText: true,
-                          prefixIcon: Icons.key,
+                          prefixIcon: Icons.lock_outline,
                           suffixIcon: Icons.visibility_off,
                           onSuffixIconTap: () => print('Toggle password'),
                         )
@@ -57,18 +59,35 @@ class Login extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: InkWell(
                           onTap: () {},
-                          child: Text('Forgot Password?')
+                          child: Text('Forgot Password?', style: TextStyle(
+                            color: colorBlack
+                          ))
                         )
                       ),
                       const SizedBox(height: 24),
-                      const SizedBox(
+                      SizedBox(
                         height: 48,
                         width: double.infinity,
                         child: Button(
-                          // onPressed: () {}, 
+                          onPressed: () => Get.off(const Home(), id: 0), 
                           label: 'Login',
                           //icon: Icons.arrow_circle_right
                         )
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Don\'t have an account? ', style: TextStyle(
+                            color: colorGrey
+                          )),
+                          InkWell(
+                            onTap: () {},
+                            child: Text('Sign Up', style: TextStyle(
+                              color: colorBlack
+                            )),
+                          )
+                        ],
                       )
                     ],
                   ),

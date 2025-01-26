@@ -1,3 +1,4 @@
+import 'package:eazi_ride/src/components/button.dart';
 import 'package:eazi_ride/src/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -152,21 +153,14 @@ class Onboarding extends StatelessWidget {
                       return SizedBox(
                         width: double.infinity, 
                         height: 50,
-                        child: TextButton(
+                        child: Button(
                           onPressed: () {
                             final idx = controller.imageCtrl.page;
                             if (idx! < 2) {
                               _jumpToPage(idx.toInt() + 1);
                             }
                           },
-                          style: TextButton.styleFrom(
-                            backgroundColor: colorPrimary,
-                            foregroundColor: Colors.white
-                          ),
-                          child: const Text('Next', style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600
-                          )),
+                          label: 'Next'
                         )
                       );
                     }
@@ -174,19 +168,12 @@ class Onboarding extends StatelessWidget {
                     return SizedBox(
                       width: double.infinity,
                       height: 50,
-                      child: TextButton(
+                      child: Button(
                         onPressed: () {
                           GetStorage().write('firstLaunch', false);
                           Get.off(const Login(), id: 0);
                         },
-                        style: TextButton.styleFrom(
-                          backgroundColor: colorPrimary,
-                          foregroundColor: Colors.white
-                        ),
-                        child: const Text('Login', style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600
-                        )),
+                        label: 'Login'
                       )
                     );
                   }),
@@ -203,7 +190,7 @@ class Onboarding extends StatelessWidget {
     return SizedBox(
       child: SvgPicture.asset(
         path,
-        fit: BoxFit.cover,
+        // fit: BoxFit.cover,
       )
     );
   }
@@ -231,7 +218,7 @@ class Onboarding extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF757575)
+              color: colorGrey
             ),
             textAlign: TextAlign.center,
           )
