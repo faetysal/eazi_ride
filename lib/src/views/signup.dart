@@ -6,11 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'forgot_password.dart';
-import 'signup.dart';
+import 'login.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class Signup extends StatelessWidget {
+  const Signup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +19,12 @@ class Login extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, kToolbarHeight + 24, 16, 16),
           height: MediaQuery.of(context).size.height,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text('EaziRide', style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold
               ), textAlign: TextAlign.center),
               const SizedBox(height: 16),
-              Container(
-                height: 250,
-                // color: Colors.red,
-                child: SvgPicture.asset('assets/svg/login.svg', fit: BoxFit.cover,)
-              ),
-              const SizedBox(height: 16,),
               Container(
                 // color: Colors.yellow,
                 padding: EdgeInsets.symmetric(horizontal: 16),
@@ -42,8 +34,24 @@ class Login extends StatelessWidget {
                       SizedBox(
                         height: 50,
                         child: Input(
-                          placeholder: 'Email address',
+                          placeholder: 'Name',
                           prefixIcon: Icons.person_4_outlined,
+                        )
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 50,
+                        child: Input(
+                          placeholder: 'Email address',
+                          prefixIcon: Icons.email_outlined,
+                        )
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 50,
+                        child: Input(
+                          placeholder: 'Phone number',
+                          prefixIcon: Icons.phone_android_outlined,
                         )
                       ),
                       const SizedBox(height: 8),
@@ -57,23 +65,27 @@ class Login extends StatelessWidget {
                           onSuffixIconTap: () => print('Toggle password'),
                         )
                       ),
-                      const SizedBox(height: 4,),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                          onTap: () => Get.to(ForgotPassword(), id: 0),
-                          child: Text('Forgot Password?', style: TextStyle(
-                            color: colorBlack
-                          ))
-                        )
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: true, 
+                            onChanged: (v) {}
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text('By continuing, I confirm I have read the Terms and Conditions and Privacy Policy.')
+                          )
+                        ],
                       ),
                       const SizedBox(height: 24),
+                    
                       SizedBox(
                         height: 48,
                         width: double.infinity,
                         child: Button(
                           onPressed: () => Get.off(const Home(), id: 0), 
-                          label: 'Login',
+                          label: 'Sign Up',
                           //icon: Icons.arrow_circle_right
                         )
                       ),
@@ -81,12 +93,12 @@ class Login extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Don\'t have an account? ', style: TextStyle(
+                          Text('Already have an account? ', style: TextStyle(
                             color: colorGrey
                           )),
                           InkWell(
-                            onTap: () => Get.off(const Signup(), id: 0),
-                            child: Text('Sign Up', style: TextStyle(
+                            onTap: () => Get.off(const Login(), id: 0),
+                            child: Text('Log In', style: TextStyle(
                               color: colorBlack
                             )),
                           )

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'services/auth_manager.dart';
 import 'views/home.dart';
 import 'views/onboarding.dart';
+import 'views/signup.dart';
 
 class Init extends StatelessWidget {
   Init({super.key});
@@ -55,7 +56,7 @@ class RedirectToView extends StatelessWidget {
     return Navigator(
       key: Get.nestedKey(0),
       onGenerateRoute: (settings) {
-        Widget page = authManager.loggedIn.value ? const Home() : const Onboarding();
+        Widget page = authManager.loggedIn.value ? const Home() : const Login();
 
         return GetPageRoute(page: () => page);
       },
