@@ -6,24 +6,24 @@ import 'package:eazi_ride/src/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import 'forgot_password.dart';
 import 'signup.dart';
 
 class Login extends StatelessWidget {
-  final LoginController controller = Get.put(LoginController());
-
-  Login({super.key});
+  const Login({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final LoginController controller = Get.put(LoginController());
 
     return Scaffold(
       body: Stack(
         children: [
           SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.fromLTRB(16, kToolbarHeight + 24, 16, 16),
+              padding: const EdgeInsets.fromLTRB(16, kToolbarHeight + 24, 16, 40),
               height: MediaQuery.of(context).size.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -59,7 +59,7 @@ class Login extends StatelessWidget {
                                 return null;
                               },
                               placeholder: 'Email address',
-                              prefixIcon: Icons.person_4_outlined,
+                              prefixIcon: Icons.alternate_email,
                             )
                           ),
                           const SizedBox(height: 16),
@@ -118,7 +118,7 @@ class Login extends StatelessWidget {
                                 color: colorGrey
                               )),
                               InkWell(
-                                onTap: () => Get.off(const Signup(), id: 0),
+                                onTap: () => Get.off(Signup(), id: 0),
                                 child: Text('Sign Up', style: TextStyle(
                                   color: colorBlack
                                 )),
@@ -147,7 +147,7 @@ class Login extends StatelessWidget {
 }
 
 class LoginController extends GetxController {
-  final formKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> formKey;
   Rx<AutovalidateMode> validateMode = AutovalidateMode.disabled.obs;
   RxBool hidePassword = true.obs;
   RxBool authenticating = false.obs;
@@ -158,6 +158,7 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    formKey = GlobalKey();
     emailCtrl = TextEditingController();
     passwordCtrl = TextEditingController();
   }

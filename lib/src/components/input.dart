@@ -1,5 +1,6 @@
 import 'package:eazi_ride/src/config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Input extends StatelessWidget {
   final TextEditingController? controller;
@@ -10,6 +11,8 @@ class Input extends StatelessWidget {
   final Function()? onSuffixIconTap;
   final bool obscureText;
   final bool readOnly;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
 
   const Input({
     super.key,
@@ -20,7 +23,9 @@ class Input extends StatelessWidget {
     this.suffixIcon,
     this.onSuffixIconTap,
     this.obscureText = false,
-    this.readOnly = false
+    this.readOnly = false,
+    this.inputFormatters,
+    this.keyboardType
   });
 
   @override
@@ -42,8 +47,10 @@ class Input extends StatelessWidget {
             child: Icon(suffixIcon)
           )
           : null,
-        focusedBorder: _buildInputBorder()
+        focusedBorder: _buildInputBorder(),
       ),
+      inputFormatters: inputFormatters,
+      keyboardType: keyboardType
     );
   }
 
