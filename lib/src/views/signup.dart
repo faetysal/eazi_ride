@@ -102,38 +102,43 @@ class Signup extends StatelessWidget {
                                 } return null;
                               },
                               placeholder: 'Enter password',
-                              obscureText: true,
+                              obscureText: controller.hidePassword.value,
                               prefixIcon: Icons.lock_outline,
-                              suffixIcon: Icons.visibility_off,
-                              onSuffixIconTap: () => print('Toggle password'),
+                              suffixIcon: controller.hidePassword.value
+                                ? Icons.visibility_off
+                                : Icons.visibility_outlined,
+                              onSuffixIconTap: () => controller.hidePassword.toggle(),
                             )
                           ),
                           const SizedBox(height: 8),
                           Row(
                             children: [
                               Checkbox(
-                                value: true, 
-                                onChanged: (v) {},
+                                value: controller.acceptTerms.value, 
+                                onChanged: (v) => controller.acceptTerms.value = v ?? false,
                                 checkColor: Colors.white,
                                 activeColor: colorPrimary,
                               ),
                               const SizedBox(width: 4),
                               Expanded(
-                                child: RichText(
-                                  text: const TextSpan(
-                                    style: TextStyle(color: colorGrey),
-                                    children: [
-                                      TextSpan(text: 'By continuing, I confirm I have read the '),
-                                      TextSpan(
-                                        text: 'Terms and Conditions ',
-                                        style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
-                                      ),
-                                      TextSpan(text: 'and '),
-                                      TextSpan(
-                                        text: 'Privacy Policy',
-                                        style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
-                                      )
-                                    ]
+                                child: GestureDetector(
+                                  onTap: () => controller.acceptTerms.toggle(),
+                                  child: RichText(
+                                    text: const TextSpan(
+                                      style: TextStyle(color: colorGrey),
+                                      children: [
+                                        TextSpan(text: 'By continuing, I confirm I have read the '),
+                                        TextSpan(
+                                          text: 'Terms and Conditions ',
+                                          style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
+                                        ),
+                                        TextSpan(text: 'and '),
+                                        TextSpan(
+                                          text: 'Privacy Policy',
+                                          style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
+                                        )
+                                      ]
+                                    )
                                   )
                                 )
                               )
@@ -213,6 +218,7 @@ class SignupController extends GetxController {
   Rx<AutovalidateMode> validateMode = AutovalidateMode.disabled.obs;
   RxBool hidePassword = true.obs;
   RxBool processing = false.obs;
+  RxBool acceptTerms = false.obs;
 
   late TextEditingController nameCtrl;
   late TextEditingController emailCtrl;

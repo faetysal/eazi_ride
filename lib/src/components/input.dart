@@ -35,6 +35,7 @@ class Input extends StatelessWidget {
       validator: validator,
       obscureText: obscureText,
       readOnly: readOnly,
+      cursorColor: colorBlack,
       decoration: InputDecoration(
         hintText: placeholder,
         prefixIcon: prefixIcon != null

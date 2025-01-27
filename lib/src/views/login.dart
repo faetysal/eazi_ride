@@ -77,10 +77,12 @@ class Login extends StatelessWidget {
                                 return null;
                               },
                               placeholder: 'Enter password',
-                              obscureText: true,
+                              obscureText: controller.hidePassword.value,
                               prefixIcon: Icons.lock_outline,
-                              suffixIcon: Icons.visibility_off,
-                              onSuffixIconTap: () => print('Toggle password'),
+                              suffixIcon: controller.hidePassword.value
+                                ? Icons.visibility_off
+                                : Icons.visibility_outlined,
+                              onSuffixIconTap: () => controller.hidePassword.toggle(),
                             )
                           ),
                           const SizedBox(height: 4,),
