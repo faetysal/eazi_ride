@@ -198,21 +198,6 @@ class Signup extends StatelessWidget {
   }
 }
 
-class FormFieldBox extends StatelessWidget {
-  final Widget? child;
-
-  const FormFieldBox({super.key, this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 50),
-      child: child,
-    );
-  }
-}
-
 class SignupController extends GetxController {
   late GlobalKey<FormState> formKey;
   Rx<AutovalidateMode> validateMode = AutovalidateMode.disabled.obs;

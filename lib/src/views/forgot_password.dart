@@ -3,6 +3,7 @@ import 'package:eazi_ride/src/components/input.dart';
 import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/components/otp.dart';
 import 'package:eazi_ride/src/config.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -16,7 +17,7 @@ class ForgotPassword extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Forgot Password'),
+        title: const Text('Forgot Password'),
         centerTitle: true,
         elevation: 0,
         foregroundColor: colorBlack,
@@ -30,23 +31,39 @@ class ForgotPassword extends StatelessWidget {
             child: SingleChildScrollView(
               child: Obx(() {
                 if (controller.stage.value == FPStage.requestToken) {
-                  return Form(
+                  return Obx(() => Form(
+                    key: controller.stage0FormKey,
+                    autovalidateMode: controller.stage0ValidateMode.value,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Forgot Password', style: TextStyle(
+                        const Text('Forgot Password', style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold
                         )),
                         const SizedBox(height: 12,),
-                        Text('Enter your email address or phone number to reset your password', style: TextStyle(
+                        const Text('Enter your email address or phone number to reset your password', style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500
                         ),),
                         const SizedBox(height: 40,),
-                        Input(
-                          prefixIcon: HugeIcons.strokeRoundedAt,
-                          placeholder: 'Email address or phone number',
+                        FormFieldBox(
+                          child: Input(
+                            controller: controller.emailCtrl,
+                            validator: (v) {
+                              if (v == null || v.isEmpty) {
+                                return 'Email address cannot be empty';
+                              } 
+
+                              if (!EmailValidator.validate(v)) {
+                                return 'Please enter a valid email address';
+                              }
+                              
+                              return null;
+                            },
+                            prefixIcon: Icons.alternate_email,
+                            placeholder: 'Email address or phone number',
+                          ),
                         ),
                         const SizedBox(height: 24,),
                         SizedBox(
@@ -59,40 +76,74 @@ class ForgotPassword extends StatelessWidget {
                         ),
                       ],
                     )
-                  );
+                  ));
                 }
 
                 if (controller.stage.value == FPStage.validateToken) {
                   return OTP(
                     formKey: controller.stage1FormKey,
                     controller: controller.tokenCtrl,
-                    onCompleted: (code) => controller.validateToken(),
+                    onCompleted: (code) => controller.validateToken(code),
                   );
                 }
 
                 if (controller.stage.value == FPStage.updatePassword) {
-                  return Form(
+                  return Obx(() => Form(
+                    key: controller.stage2FormKey,
+                    autovalidateMode: controller.stage2ValidateMode.value,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('New Password', style: TextStyle(
+                        const Text('New Password', style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold
                         )),
                         const SizedBox(height: 12),
-                        Text('Create your new password', style: TextStyle(
+                        const Text('Create your new password', style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500
                         )),
                         const SizedBox(height: 40),
-                        Input(
-                          prefixIcon: HugeIcons.strokeRoundedLockPassword,
-                          placeholder: 'Password',
+                        FormFieldBox(
+                          child: Input(
+                            controller: controller.passwd1Ctrl,
+                            validator: (v) {
+                              if (v == null || v.isEmpty) {
+                                return 'Password cannot be empty';
+                              } return null;
+                            },
+                            prefixIcon: Icons.lock_outline,
+                            placeholder: 'Password',
+                            obscureText: controller.hidePassword.value,
+                            suffixIcon: controller.hidePassword.value
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                            onSuffixIconTap: () => controller.hidePassword.toggle(),
+                          ),
                         ),
                         const SizedBox(height: 24,),
-                        Input(
-                          prefixIcon: HugeIcons.strokeRoundedLockPassword,
-                          placeholder: 'Confirm Password',
+                        FormFieldBox(
+                          child: Input(
+                            controller: controller.passwd2Ctrl,
+                            validator: (v) {
+                              if (v == null || v.isEmpty) {
+                                return 'Password cannot be empty';
+                              } 
+
+                              if (v != controller.passwd1Ctrl.text) {
+                                return 'Passwords do not match';
+                              }
+                              
+                              return null;
+                            },
+                            prefixIcon: Icons.lock_outline,
+                            placeholder: 'Password',
+                            obscureText: controller.hidePassword.value,
+                            suffixIcon: controller.hidePassword.value
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                            onSuffixIconTap: () => controller.hidePassword.toggle(),
+                          ),
                         ),
                         const SizedBox(height: 24,),
                         SizedBox(
@@ -105,7 +156,7 @@ class ForgotPassword extends StatelessWidget {
                         )
                       ],
                     )
-                  );
+                  ));
                 }
 
                 if (controller.stage.value == FPStage.passwordUpdated) {
@@ -156,45 +207,71 @@ class FPController extends GetxController {
   Rx<FPStage> stage = FPStage.requestToken.obs;
   RxBool processing = false.obs;
 
-  late GlobalKey<FormState> stage0FormKey;
-  late GlobalKey<FormState> stage1FormKey;
-  late GlobalKey<FormState> stage2FormKey;
+  final stage0FormKey = GlobalKey<FormState>();
+  Rx<AutovalidateMode> stage0ValidateMode = AutovalidateMode.disabled.obs;
+  late TextEditingController emailCtrl;
+
+  final stage1FormKey = GlobalKey<FormState>();
+  AutovalidateMode stage1ValidateMode = AutovalidateMode.disabled;
   late TextEditingController tokenCtrl;
+
+  final stage2FormKey = GlobalKey<FormState>();
+  Rx<AutovalidateMode> stage2ValidateMode = AutovalidateMode.disabled.obs;
+  late TextEditingController passwd1Ctrl;
+  late TextEditingController passwd2Ctrl;
+  RxBool hidePassword = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    stage0FormKey = GlobalKey<FormState>();
-
-    stage1FormKey = GlobalKey<FormState>();
+    emailCtrl = TextEditingController();
     tokenCtrl = TextEditingController();
+    passwd1Ctrl = TextEditingController();
+    passwd2Ctrl = TextEditingController();
+  }
 
-    stage2FormKey = GlobalKey<FormState>();
-
+  @override
+  void onClose() {
+    emailCtrl.dispose();
+    tokenCtrl.dispose();
+    passwd1Ctrl.dispose();
+    passwd2Ctrl.dispose();
+    super.onClose();
   }
 
   void requestToken() async {
-    processing.value = true;
-    await Future.delayed(const Duration(seconds: 2));
-    processing.value = false;
+    if (stage0FormKey.currentState!.validate()) {
+      processing.value = true;
+      await Future.delayed(const Duration(seconds: 2));
+      processing.value = false;
 
-    stage.value = FPStage.validateToken;
+      stage.value = FPStage.validateToken;
+    } else {
+      stage0ValidateMode.value = AutovalidateMode.onUserInteraction;
+    }
   }
 
-  void validateToken() async {
+  void validateToken(String code) async {
     processing.value = true;
     await Future.delayed(const Duration(seconds: 2));
-    processing.value = false;
+    if (code == '12345') {
 
-    stage.value = FPStage.updatePassword;
+      stage.value = FPStage.updatePassword;
+    }
+
+    processing.value = false;
   }
 
   void updatePassword() async {
-    processing.value = true;
-    await Future.delayed(const Duration(seconds: 2));
-    processing.value = false;
+    if (stage2FormKey.currentState!.validate()) {
+      processing.value = true;
+      await Future.delayed(const Duration(seconds: 2));
+      processing.value = false;
 
-    stage.value = FPStage.passwordUpdated;
+      stage.value = FPStage.passwordUpdated;
+    } else {
+      stage2ValidateMode.value = AutovalidateMode.onUserInteraction;
+    }
   }
 }
 
