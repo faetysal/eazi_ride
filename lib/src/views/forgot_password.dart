@@ -1,5 +1,6 @@
 import 'package:eazi_ride/src/components/button.dart';
 import 'package:eazi_ride/src/components/input.dart';
+import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/components/otp.dart';
 import 'package:eazi_ride/src/config.dart';
 import 'package:flutter/material.dart';
@@ -140,14 +141,7 @@ class ForgotPassword extends StatelessWidget {
           ),
           Obx(() {
             if (controller.processing.value) {
-              return Container(
-                color: Colors.white.withOpacity(.3),
-                child: Center(
-                  child: CircularProgressIndicator.adaptive(
-                    valueColor: AlwaysStoppedAnimation(colorPrimary),
-                  ),
-                ),
-              );
+              return const Loader();
             }
 
             return Container();

@@ -1,3 +1,4 @@
+import 'package:eazi_ride/src/config.dart';
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
@@ -40,8 +41,15 @@ class Input extends StatelessWidget {
             onTap: onSuffixIconTap,
             child: Icon(suffixIcon)
           )
-          : null
+          : null,
+        focusedBorder: _buildInputBorder()
       ),
+    );
+  }
+
+  UnderlineInputBorder _buildInputBorder({Color color = colorBlack}) {
+    return UnderlineInputBorder(
+      borderSide: BorderSide(color: color)
     );
   }
 }

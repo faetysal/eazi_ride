@@ -97,7 +97,7 @@ class Signup extends StatelessWidget {
                             color: colorGrey
                           )),
                           InkWell(
-                            onTap: () => Get.off(const Login(), id: 0),
+                            onTap: () => Get.off(Login(), id: 0),
                             child: Text('Log In', style: TextStyle(
                               color: colorBlack
                             )),

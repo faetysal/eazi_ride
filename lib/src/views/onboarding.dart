@@ -36,7 +36,7 @@ class Onboarding extends StatelessWidget {
                                 iconAlignment: IconAlignment.end,
                                 onPressed: () {
                                   GetStorage().write('firstLaunch', false);
-                                  Get.off(const Login(), id: 0);
+                                  Get.off(Login(), id: 0);
                                 },
                                 icon: Icon(Icons.arrow_forward, color: Colors.black,),
                                 label: Text('Skip', style: TextStyle(
@@ -171,7 +171,7 @@ class Onboarding extends StatelessWidget {
                       child: Button(
                         onPressed: () {
                           GetStorage().write('firstLaunch', false);
-                          Get.off(const Login(), id: 0);
+                          Get.off(Login(), id: 0);
                         },
                         label: 'Login'
                       )

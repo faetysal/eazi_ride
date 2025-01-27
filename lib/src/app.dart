@@ -13,7 +13,11 @@ class EaziRide extends StatelessWidget {
     final ThemeData theme = ThemeData(
       useMaterial3: false,
       primaryColor: colorPrimary,
-      textTheme: GoogleFonts.spaceGroteskTextTheme()
+      textTheme: GoogleFonts.spaceGroteskTextTheme(),
+      inputDecorationTheme: InputDecorationTheme(
+        prefixIconColor: _resolveIconColor(),
+        suffixIconColor: _resolveIconColor()
+      )
     );
 
     return GetMaterialApp(
@@ -28,5 +32,15 @@ class EaziRide extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Color _resolveIconColor() {
+    return WidgetStateColor.resolveWith((states) {
+      if (states.contains(WidgetState.focused)) {
+        return colorPrimary;
+      }
+
+      return colorGrey;
+    });
   }
 }
