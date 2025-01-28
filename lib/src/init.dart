@@ -57,7 +57,7 @@ class RedirectToView extends StatelessWidget {
     return Navigator(
       key: Get.nestedKey(0),
       onGenerateRoute: (settings) {
-        Widget page = authManager.loggedIn.value ? const Home() : const Signup();
+        Widget page = authManager.loggedIn.value ? const Home() : const Login();
 
         return GetPageRoute(page: () => page);
       },

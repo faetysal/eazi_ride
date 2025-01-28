@@ -3,6 +3,8 @@ import 'package:eazi_ride/src/components/input.dart';
 import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/components/otp.dart';
 import 'package:eazi_ride/src/config.dart';
+import 'package:eazi_ride/src/services/popup_manager.dart';
+import 'package:eazi_ride/src/services/user.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -196,6 +198,7 @@ class ForgotPassword extends StatelessWidget {
 class FPController extends GetxController {
   Rx<FPStage> stage = FPStage.requestToken.obs;
   RxBool processing = false.obs;
+  late UserService userService;
 
   final stage0FormKey = GlobalKey<FormState>();
   Rx<AutovalidateMode> stage0ValidateMode = AutovalidateMode.disabled.obs;
@@ -214,6 +217,8 @@ class FPController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    userService = Get.find();
+
     emailCtrl = TextEditingController();
     tokenCtrl = TextEditingController();
     passwd1Ctrl = TextEditingController();
@@ -232,7 +237,14 @@ class FPController extends GetxController {
   void requestToken() async {
     if (stage0FormKey.currentState!.validate()) {
       processing.value = true;
-      await Future.delayed(const Duration(seconds: 2));
+
+      final user = await userService.getUserByEmail(emailCtrl.text);
+      if (user == null) {
+        processing.value = false;
+        PopupManager.error(title: 'Failed', message: 'Email address does not exist.');
+        return;
+      }
+
       processing.value = false;
 
       stage.value = FPStage.validateToken;
@@ -243,10 +255,12 @@ class FPController extends GetxController {
 
   void validateToken(String code) async {
     processing.value = true;
-    await Future.delayed(const Duration(seconds: 2));
-    if (code == '12345') {
+    await Future.delayed(const Duration(seconds: 1));
 
+    if (code == '12345') {
       stage.value = FPStage.updatePassword;
+    } else {
+      PopupManager.error(title: 'Verification Failed', message: 'Invalid verification code');
     }
 
     processing.value = false;
@@ -255,7 +269,17 @@ class FPController extends GetxController {
   void updatePassword() async {
     if (stage2FormKey.currentState!.validate()) {
       processing.value = true;
-      await Future.delayed(const Duration(seconds: 2));
+      final result = await userService.updatePassword(
+        email: emailCtrl.text, 
+        password: passwd1Ctrl.text
+      );
+
+      if (result == 0) {
+        processing.value = false;
+        PopupManager.error(message: 'Unable to update password');
+        return;
+      }
+
       processing.value = false;
 
       stage.value = FPStage.passwordUpdated;

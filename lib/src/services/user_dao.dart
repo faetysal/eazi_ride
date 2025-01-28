@@ -36,4 +36,10 @@ class UserDao {
     return user;
   }
 
+  Future findOneAndUpdate(List<Filter> filters, Map<String, dynamic> data) async {
+    final finder = Finder(filter: Filter.and(filters));
+    final count = await _store.update(await _db, data, finder: finder);
+    return count;
+  }
+
 }

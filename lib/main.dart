@@ -1,5 +1,6 @@
 import 'package:eazi_ride/src/app.dart';
 import 'package:eazi_ride/src/services/auth_manager.dart';
+import 'package:eazi_ride/src/services/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,4 +25,5 @@ void main() async {
 Future initServices() async {
   await GetStorage.init();
   Get.put(AuthManager());
+  Get.put<UserService>(UserService());
 }

@@ -243,7 +243,7 @@ class SignupController extends GetxController {
   void onInit() {
     super.onInit();
 
-    userService = Get.put(UserService());
+    userService = Get.find();
 
     formKey = GlobalKey();
     nameCtrl = TextEditingController();
@@ -275,7 +275,8 @@ class SignupController extends GetxController {
       final User user = User(
         name: nameCtrl.text,
         email: emailCtrl.text,
-        phone: phoneCtrl.text
+        phone: phoneCtrl.text,
+        password: passwordCtrl.text
       );
 
       await userService.signup(user);

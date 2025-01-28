@@ -27,4 +27,12 @@ class UserService extends GetxController {
     final User? user = await _userDao.findOne([filter]);
     return user;
   }
+
+  Future updatePassword({required String email, required String password}) async {
+    await Future.delayed(const Duration(seconds: 1));
+
+    final filter = Filter.equals('email', email);
+    final result = await _userDao.findOneAndUpdate([filter], {'password': password});
+    return result;
+  }
 }

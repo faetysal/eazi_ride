@@ -3,12 +3,14 @@ class User {
   String name;
   String email;
   String phone;
+  String password;
 
   User({
     int? id,
     this.name = '',
     this.email = '',
-    this.phone = ''
+    this.phone = '',
+    this.password = ''
   }): _id = id;
 
   factory User.fromMap(data) {
@@ -16,7 +18,8 @@ class User {
       id: data['id'],
       name: data['name'],
       email: data['email'],
-      phone: data['phone']
+      phone: data['phone'],
+      password: data['password']
     );
   }
 
@@ -24,7 +27,8 @@ class User {
     return {
       'name': name,
       'email': email,
-      'phone': phone
+      'phone': phone,
+      'password': password
     };
   }
 
