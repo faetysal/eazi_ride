@@ -24,7 +24,7 @@ class UserService extends GetxController {
     await Future.delayed(const Duration(seconds: 1));
     
     final filter = Filter.equals('email', email);
-    final User? user = await _userDao.findOne(filter);
+    final User? user = await _userDao.findOne([filter]);
     return user;
   }
 }

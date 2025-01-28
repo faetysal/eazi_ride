@@ -22,15 +22,14 @@ class UserDao {
     }).toList();
   }
 
-  Future<User?> findOne(Filter filter) async {
-    final finder = Finder(filter: filter);
-    final records = await _store.find(await _db, finder: finder);
+  Future<User?> findOne(List<Filter> filters) async {
+    final finder = Finder(filter: Filter.and(filters));
+    final record = await _store.findFirst(await _db, finder: finder);
 
-    if (records.isEmpty) {
+    if (record == null) {
       return null;
     }
 
-    final record = records.first;
     final user = User.fromMap(record.value);
     user.id = record.key;
 
