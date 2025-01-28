@@ -2,6 +2,8 @@ import 'package:eazi_ride/src/components/button.dart';
 import 'package:eazi_ride/src/components/input.dart';
 import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/config.dart';
+import 'package:eazi_ride/src/models/user.dart';
+import 'package:eazi_ride/src/services/user.dart';
 import 'package:eazi_ride/src/views/home.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -210,9 +212,14 @@ class SignupController extends GetxController {
   late TextEditingController phoneCtrl;
   late TextEditingController passwordCtrl;
 
+  late UserService userService;
+
   @override
   void onInit() {
     super.onInit();
+
+    userService = Get.put(UserService());
+
     formKey = GlobalKey();
     nameCtrl = TextEditingController();
     emailCtrl = TextEditingController();
@@ -233,6 +240,15 @@ class SignupController extends GetxController {
     if (formKey.currentState!.validate()) {
       processing.value = true;
 
+      final User user = User(
+        name: nameCtrl.text,
+        email: emailCtrl.text,
+        phone: phoneCtrl.text
+      );
+
+      await userService.signup(user);
+
+      processing.value = false;
 
     } else {
       validateMode.value = AutovalidateMode.onUserInteraction;

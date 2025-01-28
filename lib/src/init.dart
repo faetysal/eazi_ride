@@ -1,4 +1,5 @@
 import 'package:eazi_ride/src/views/login.dart';
+import 'package:eazi_ride/src/views/test.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,7 +57,7 @@ class RedirectToView extends StatelessWidget {
     return Navigator(
       key: Get.nestedKey(0),
       onGenerateRoute: (settings) {
-        Widget page = authManager.loggedIn.value ? const Home() : Login();
+        Widget page = authManager.loggedIn.value ? const Home() : const Onboarding();
 
         return GetPageRoute(page: () => page);
       },
