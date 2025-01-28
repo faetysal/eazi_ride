@@ -3,8 +3,10 @@ import 'package:eazi_ride/src/components/input.dart';
 import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/config.dart';
 import 'package:eazi_ride/src/models/user.dart';
+import 'package:eazi_ride/src/services/popup_manager.dart';
 import 'package:eazi_ride/src/services/user.dart';
 import 'package:eazi_ride/src/views/home.dart';
+import 'package:eazi_ride/src/views/success.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -113,38 +115,61 @@ class Signup extends StatelessWidget {
                             )
                           ),
                           const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: controller.acceptTerms.value, 
-                                onChanged: (v) => controller.acceptTerms.value = v ?? false,
-                                checkColor: Colors.white,
-                                activeColor: colorPrimary,
-                              ),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => controller.acceptTerms.toggle(),
-                                  child: RichText(
-                                    text: const TextSpan(
-                                      style: TextStyle(color: colorGrey),
-                                      children: [
-                                        TextSpan(text: 'By continuing, I confirm I have read the '),
-                                        TextSpan(
-                                          text: 'Terms and Conditions ',
-                                          style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
-                                        ),
-                                        TextSpan(text: 'and '),
-                                        TextSpan(
-                                          text: 'Privacy Policy',
-                                          style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
+                          FormField<bool>(
+                            builder: (state) {
+                              return Container(
+                                padding: state.errorText != null ? const EdgeInsets.symmetric(horizontal: 8) : null,
+                                decoration: BoxDecoration(
+                                  border: state.errorText != null
+                                    ? Border.all(color: Colors.red)
+                                    : null
+                                ),
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: controller.acceptTerms.value, 
+                                      onChanged: (v) {
+                                        controller.acceptTerms.value = v ?? false;
+                                        state.didChange(v);
+                                      },
+                                      checkColor: Colors.white,
+                                      activeColor: colorPrimary,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          controller.acceptTerms.toggle();
+                                          state.didChange(controller.acceptTerms.value);
+                                        },
+                                        child: RichText(
+                                          text: const TextSpan(
+                                            style: TextStyle(color: colorGrey),
+                                            children: [
+                                              TextSpan(text: 'By continuing, I confirm I have read the '),
+                                              TextSpan(
+                                                text: 'Terms and Conditions ',
+                                                style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
+                                              ),
+                                              TextSpan(text: 'and '),
+                                              TextSpan(
+                                                text: 'Privacy Policy',
+                                                style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500)
+                                              )
+                                            ]
+                                          )
                                         )
-                                      ]
+                                      )
                                     )
-                                  )
-                                )
-                              )
-                            ],
+                                  ],
+                                ),
+                              );
+                            },
+                            validator: (v) {
+                              if (!controller.acceptTerms.value) {
+                                return 'You need to accept terms';
+                              } return null;
+                            },
                           ),
                           const SizedBox(height: 24),
                         
@@ -250,6 +275,13 @@ class SignupController extends GetxController {
 
       processing.value = false;
 
+      Get.off(
+        Success(
+          message: 'Account created successfully',
+          onContinue: () => Get.off(const Login(), id: 0),
+        ),
+        id: 0
+      );
     } else {
       validateMode.value = AutovalidateMode.onUserInteraction;
     }

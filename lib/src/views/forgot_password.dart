@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import 'success.dart';
+
 class ForgotPassword extends StatelessWidget {
   const ForgotPassword({super.key});
 
@@ -160,30 +162,18 @@ class ForgotPassword extends StatelessWidget {
                 }
 
                 if (controller.stage.value == FPStage.passwordUpdated) {
-                  return Container(width: double.infinity, child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        HugeIcons.strokeRoundedCheckmarkBadge01,
-                        color: colorPrimary,
-                        size: 120
-                      ),
-                      const SizedBox(height: 24,),
-                      Text('Password updated successfully', style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold
-                      ), textAlign: TextAlign.center,),
-                      const SizedBox(height: 40),
-                      SizedBox(
-                        height: 45,
-                        width: double.infinity,
-                        child: Button(
-                          onPressed: () => Get.back(id: 0),
-                          label: 'Login',
+                  return SizedBox(
+                    width: double.infinity, 
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Success(
+                          message: 'Password updated successfully',
+                          onContinue: () => Get.back(id: 0),
                         ),
-                      )
-                    ],
-                  ));
+                      ],
+                    )
+                  );
                 }
 
                 return Container();

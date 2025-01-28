@@ -1,2 +1,7 @@
 {"version":1,"sembast":1}
 {"key":1,"store":"users","value":{"name":"John","email":"johndoe@example.com","phone":"01234567890"}}
+{"key":2,"store":"users","value":{"name":"James Bond","email":"jb@example.com","phone":"01234567890"}}
+{"key":3,"store":"users","value":{"name":"Jack Bauer","email":"jbauer@example.com","phone":"01234567890"}}
+{"key":4,"store":"users","value":{"name":"aaaaaa","email":"user@example.com","phone":"12121221211"}}
+{"key":5,"store":"users","value":{"name":"Nintendo","email":"Nintendo@nintendo.com","phone":"10101010101"}}
+{"key":6,"store":"users","value":{"name":"JJJ","email":"user@example.com","phone":"11111111111"}}
