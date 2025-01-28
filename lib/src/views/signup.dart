@@ -265,6 +265,13 @@ class SignupController extends GetxController {
     if (formKey.currentState!.validate()) {
       processing.value = true;
 
+      final userRecord = await userService.getUserByEmail(emailCtrl.text);
+      if (userRecord != null) {
+        processing.value = false;
+        PopupManager.error(message: 'Email address already exists');
+        return;
+      }
+
       final User user = User(
         name: nameCtrl.text,
         email: emailCtrl.text,

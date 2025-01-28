@@ -11,6 +11,12 @@ void main() async {
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
   );
 
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light
+    )
+  );
+
   await initServices();
   runApp(const EaziRide());
 }

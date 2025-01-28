@@ -8,9 +8,8 @@ class UserDao {
   Future<Database> get _db async => await AppDB().db;
 
   Future save(User user) async {
-    // 1 sec delay to simulate network
-    await Future.delayed(const Duration(seconds: 1));
-    await _store.add(await _db, user.toMap());
+    final id = await _store.add(await _db, user.toMap());
+    return id;
   }
 
   Future<List<User>> find() async {
@@ -21,6 +20,21 @@ class UserDao {
 
       return user;
     }).toList();
+  }
+
+  Future<User?> findOne(Filter filter) async {
+    final finder = Finder(filter: filter);
+    final records = await _store.find(await _db, finder: finder);
+
+    if (records.isEmpty) {
+      return null;
+    }
+
+    final record = records.first;
+    final user = User.fromMap(record.value);
+    user.id = record.key;
+
+    return user;
   }
 
 }
