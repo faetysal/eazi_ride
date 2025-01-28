@@ -12,8 +12,19 @@ class UserService extends GetxController {
     _userDao = UserDao();
   }
 
-  Future signup(User user) async {
+  Future<User?> login(String email, String password) async {
     // 1 sec delay to simulate network
+    await Future.delayed(const Duration(seconds: 1));
+    
+    final filters = [
+      Filter.equals('email', email),
+      Filter.equals('password', password),
+    ];
+    final User? user = await _userDao.findOne(filters);
+    return user;
+  }
+
+  Future signup(User user) async {
     await Future.delayed(const Duration(seconds: 1));
 
     final result = await _userDao.save(user);

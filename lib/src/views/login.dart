@@ -2,6 +2,9 @@ import 'package:eazi_ride/src/components/button.dart';
 import 'package:eazi_ride/src/components/input.dart';
 import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/config.dart';
+import 'package:eazi_ride/src/models/user.dart';
+import 'package:eazi_ride/src/services/popup_manager.dart';
+import 'package:eazi_ride/src/services/user.dart';
 import 'package:eazi_ride/src/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -157,9 +160,13 @@ class LoginController extends GetxController {
   late TextEditingController emailCtrl;
   late TextEditingController passwordCtrl;
 
+  late UserService userService;
+
   @override
   void onInit() {
     super.onInit();
+    userService = Get.find();
+
     formKey = GlobalKey();
     emailCtrl = TextEditingController();
     passwordCtrl = TextEditingController();
@@ -175,8 +182,18 @@ class LoginController extends GetxController {
   void login() async {
     if (formKey.currentState!.validate()) {
       authenticating.value = true;
+      final User? user = await userService.login(emailCtrl.text, passwordCtrl.text);
+      if (user == null) {
+        authenticating.value = false;
+        PopupManager.error(
+          title: 'Authentication Failed',
+          message: 'Invalid email or password.'
+        );
+        return;
+      }
 
-      // Get.off(const Home(), id: 0)
+      authenticating.value = false;
+      Get.off(const Home(), id: 0);
     } else {
       validateMode.value = AutovalidateMode.onUserInteraction;
     }
