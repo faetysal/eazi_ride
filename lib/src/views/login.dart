@@ -9,7 +9,6 @@ import 'package:eazi_ride/src/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 import 'forgot_password.dart';
 import 'signup.dart';
@@ -20,6 +19,9 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoginController controller = Get.put(LoginController());
+
+    /*const key = String.fromEnvironment('GOOGLE_API_KEY');
+    print('Map Key: $key');*/
 
     return Scaffold(
       body: Stack(

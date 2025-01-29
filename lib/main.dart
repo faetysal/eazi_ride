@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
@@ -17,6 +17,8 @@ void main() async {
       statusBarBrightness: Brightness.light
     )
   );
+
+  // await FlutterConfig.loadEnvVariables();
 
   await initServices();
   runApp(const EaziRide());

@@ -1,0 +1,1 @@
+-keep class com.example.eazi_ride.BuildConfig { *; }
