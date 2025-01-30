@@ -195,7 +195,7 @@ class LoginController extends GetxController {
       }
 
       authenticating.value = false;
-      Get.off(const Home(), id: 0);
+      Get.off(Home(), id: 0);
     } else {
       validateMode.value = AutovalidateMode.onUserInteraction;
     }
