@@ -9,6 +9,7 @@ import 'package:eazi_ride/src/controllers/home.dart';
 import 'package:eazi_ride/src/services/http.dart';
 import 'package:eazi_ride/src/services/ride.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -164,6 +165,7 @@ class Home extends StatelessWidget {
                                     )),
                                     const SizedBox(height: 16,),
                                     _buildVehicleType(
+                                      icon: 'car_regular.svg',
                                       title: 'Regular',
                                       time: '2 mins',
                                       capacity: 4,
@@ -173,6 +175,7 @@ class Home extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 16),
                                     _buildVehicleType(
+                                      icon: 'car_executive.svg',
                                       title: 'Executive',
                                       time: '3 mins',
                                       capacity: 4,
@@ -182,6 +185,7 @@ class Home extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 16),
                                     _buildVehicleType(
+                                      icon: 'car_economy.svg',
                                       title: 'Economy',
                                       time: '7 mins',
                                       capacity: 4,
@@ -367,7 +371,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget _buildVehicleType({String? title, String? time, int? capacity, String? amount, bool selected = false, Function()? onTap}) {
+  Widget _buildVehicleType({String? title, String? time, int? capacity, String? amount, String? icon, bool selected = false, Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -379,7 +383,8 @@ class Home extends StatelessWidget {
           leading: Container(
             width: 70,
             height: 70,
-            color: colorPrimary,
+            // color: colorPrimary,
+            child: SvgPicture.asset('assets/svg/$icon'),
           ),
           title: Text(title ?? ''),
           subtitle: Row(
