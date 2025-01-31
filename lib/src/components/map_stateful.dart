@@ -6,12 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class EaziMap extends StatelessWidget {
+class EaziMap extends StatefulWidget {
   final LatLng initialLocation;
   final Set<Marker> markers; 
   final Set<Polyline> polylines; 
   final Function(GoogleMapController controller) onMapCreated;
-  final String? style;
+  final String? mapStyle;
 
   const EaziMap({
     super.key,
@@ -19,8 +19,18 @@ class EaziMap extends StatelessWidget {
     this.markers = const {},
     this.polylines = const {},
     required this.onMapCreated,
-    this.style
+    this.mapStyle
   });
+
+  @override
+  EaziMapState createState() => EaziMapState();
+}
+
+class EaziMapState extends State<EaziMap> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +43,13 @@ class EaziMap extends StatelessWidget {
         bottom: MediaQuery.of(context).size.height * .4
       ),
       initialCameraPosition: CameraPosition(
-        target: initialLocation,
+        target: widget.initialLocation,
         zoom: 14,
       ),
-      style: style,
-      markers: markers,
-      polylines: polylines,
-      onMapCreated: onMapCreated
+      style: widget.mapStyle,
+      markers: widget.markers,
+      polylines: widget.polylines,
+      onMapCreated: widget.onMapCreated
     );
   }
 }

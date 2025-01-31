@@ -47,9 +47,7 @@ class Home extends StatelessWidget {
                 markers: controller.markers.value,
                 polylines: controller.polylines.value,
                 onMapCreated: (GoogleMapController ctrl) {
-                  if (!controller.mapController.isCompleted) {
-                    controller.mapController.complete(ctrl);
-                  }
+                  controller.mapController.complete(ctrl);
                 },
               ),
               DraggableScrollableSheet(
