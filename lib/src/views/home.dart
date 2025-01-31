@@ -17,15 +17,16 @@ import 'package:lottie/lottie.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Home extends StatelessWidget {
-  final Http http = Get.put(Http());
-  final RideService rideService = Get.put(RideService());
 
-  final HomeController controller = Get.put(HomeController());
 
   Home({super.key});
 
   @override
   Widget build(BuildContext context) {
+  final Http http = Get.put(Http());
+    final RideService rideService = Get.put(RideService());
+    final HomeController controller = Get.put(HomeController());
+
     return Scaffold(
       body: controller.obx(
         (state) {

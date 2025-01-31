@@ -1,16 +1,13 @@
-# eazi_ride
+# Eazi Ride
 
-A new Flutter project.
+A ride hailing flutter app.
 
-## Getting Started
+## How to run
 
-This project is a starting point for a Flutter application.
+Rename .env.sample to .env and fill in google api key. Run:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+flutter run --dart-define-from-file=.env
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
