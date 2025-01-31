@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:async/async.dart';
 import 'package:eazi_ride/src/config.dart';
+import 'package:eazi_ride/src/models/driver.dart';
 import 'package:eazi_ride/src/services/ride.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +48,10 @@ class HomeController extends GetxController with StateMixin {
 
   Rx<RideType> rideType = RideType.regular.obs;
   RxDouble maxBottomSheetSize = RxDouble(1);
+
+  late Timer searchDriverTimer;
+  bool shouldFindDriver = false; // for simulation, whether driver should be found or not
+  Driver? driverFound;
 
   @override
   void onInit() async {
@@ -135,38 +141,33 @@ class HomeController extends GetxController with StateMixin {
   }*/
 
   void gotoSelectRide() async {
-    change(null, status: RxStatus.loading());
+    // change(null, status: RxStatus.loading());
     rideState.value = RideState.selectRide;
     maxBottomSheetSize.value = .8;
     bottomSheetController.reset();
     final GoogleMapController mapCtrl = await mapController.future;
     final fromLoc = await rideService.getPlaceDetails(fromId!);
     final toLoc = await rideService.getPlaceDetails(fromId!);
-    /*await mapCtrl.moveCamera(CameraUpdate.newLatLngBounds(
+    await mapCtrl.moveCamera(CameraUpdate.newLatLngBounds(
       computeBounds([
         LatLng(toLoc['lat'], toLoc['lng']),
         LatLng(fromLoc['lat'], fromLoc['lng']),
       ]), 
       70
-    ));*/
+    ));
 
     /* Set Pins */
-    print('Adding marker 1');
     markers.value.add(Marker(
       markerId: const MarkerId('srcPin'),
       position: LatLng(fromLoc['lat'], fromLoc['lng']),
     ));
-    print('Adding marker 2');
+
     markers.value.add(Marker(
       markerId: const MarkerId('dstPin'),
       position: LatLng(toLoc['lat'], toLoc['lng']),
     ));
 
-    print('Markers: $markers');
-
-
     /* Set polylines */
-    print('Setting polylines');
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       request: PolylineRequest(
         origin: PointLatLng(fromLoc['lat'], fromLoc['lng']), 
@@ -191,8 +192,7 @@ class HomeController extends GetxController with StateMixin {
     );
 
     polylines.value.add(polyline);
-    print('Polylines added');
-    change(null, status: RxStatus.success());
+    // change(null, status: RxStatus.success());
   }
 
   LatLngBounds computeBounds(List<LatLng> list) {
@@ -211,12 +211,41 @@ class HomeController extends GetxController with StateMixin {
     }
     return LatLngBounds(southwest: LatLng(s, w), northeast: LatLng(n, e));
   }
+
+  void searchForDriver() async {
+    rideState.value = RideState.searchingDriver;
+    final timer = Timer(
+      const Duration(seconds: 15),
+      () {
+        if (shouldFindDriver) {
+          getRandomDriver();
+          rideState.value = RideState.awaitingDriver;
+        } else {
+          rideState.value = RideState.driverNotFound;
+        }
+      }
+    );
+  }
+
+  void cancelRide() {
+    rideState.value = RideState.initial;
+    maxBottomSheetSize.value = 1;
+  }
+
+  void getRandomDriver() {
+    Random random = Random();
+    int driverIdx = random.nextInt(rideService.drivers.length);
+    print('driver idx: $driverIdx');
+    driverFound = rideService.drivers[driverIdx];
+  }
 }
 
 enum RideState {
   initial,
   selectLocation,
   selectRide,
+  searchingDriver,
+  driverNotFound,
   awaitingDriver,
   inProgress,
   summary

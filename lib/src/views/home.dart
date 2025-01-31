@@ -6,12 +6,14 @@ import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/components/map.dart';
 import 'package:eazi_ride/src/config.dart';
 import 'package:eazi_ride/src/controllers/home.dart';
+import 'package:eazi_ride/src/models/driver.dart';
 import 'package:eazi_ride/src/services/http.dart';
 import 'package:eazi_ride/src/services/ride.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Home extends StatelessWidget {
@@ -100,12 +102,19 @@ class Home extends StatelessWidget {
                                     )
                                   ),
                                 ),
-                                const SizedBox(height: 16),
-                                _buildLocHistoryItem(),
-                                const SizedBox(height: 8,),
-                                _buildLocHistoryItem(),
-                                const SizedBox(height: 8,),
-                                _buildLocHistoryItem(),
+                                const SizedBox(height: 40),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.history, size: 100, color: colorGrey,),
+                                    const SizedBox(height: 8,),
+                                    Text('Ride History', style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: colorGrey
+                                    ))
+                                  ],
+                                )
                               ],
                             );
                           }
@@ -113,7 +122,7 @@ class Home extends StatelessWidget {
                           if (controller.rideState.value == RideState.selectLocation) {
                             return ListView.separated(
                               controller: scrollController,
-                              padding: EdgeInsets.only(top: 200),
+                              padding: EdgeInsets.only(top: 230),
                               itemBuilder:(ctx, idx) {
                                 final prediction = controller.predictions[idx];
                                 final subtitle = prediction['terms']?[prediction['terms'].length - 2];
@@ -210,7 +219,9 @@ class Home extends StatelessWidget {
                                             height: 50,
                                             child: Button(
                                               label: 'Book Now',
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                controller.searchForDriver();
+                                              },
                                             )
                                           )
                                         ),
@@ -229,6 +240,104 @@ class Home extends StatelessWidget {
                                     ),
                                   )
                                 )
+                              ],
+                            );
+                          }
+
+                          if (controller.rideState.value == RideState.searchingDriver) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset('assets/searching.json', frameRate: FrameRate.max),
+                                const SizedBox(height: 4),
+                                Text('Searching for nearby drivers', style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold
+                                ))
+                              ],
+                            );
+                          }
+
+                          if (controller.rideState.value == RideState.driverNotFound) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.info_outline, size: 80, color: colorGrey,),
+                                const SizedBox(height: 8,),
+                                Text('No driver found', style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold
+                                )),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  height: 50,
+                                  width: double.infinity,
+                                  child: Button(
+                                    label: 'Retry',
+                                    onPressed: () {
+                                      controller.shouldFindDriver = true;
+                                      controller.searchForDriver();
+                                    }
+                                  ),
+                                ),
+                                const SizedBox(height: 8,),
+                                SizedBox(
+                                  height: 50,
+                                  width: double.infinity,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      controller.cancelRide();
+                                    }, 
+                                    child: Text('Cancel', style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red
+                                    ))
+                                  )
+                                )
+                              ],
+                            );
+                          }
+
+                          if (controller.rideState.value == RideState.awaitingDriver) {
+                            final Driver driver = controller.driverFound!;
+
+                            return ListView(
+                              controller: scrollController,
+                              padding: EdgeInsets.zero,
+                              children: [
+                                Container(
+                                  height: 100,
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  color: colorPrimary.withOpacity(.1),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(driver.name, style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold
+                                      )),
+                                      CircleAvatar(
+                                        radius: 35,
+                                        backgroundImage: AssetImage('assets/images/${driver.photo}'),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 16,),
+                                Text('Car Type', style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18
+                                )),
+                                const SizedBox(height: 8),
+                                Text(driver.car!.type.name.capitalize!, style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16
+                                )),
+                                const SizedBox(height: 8),
+                                Text(driver.car!.plate, style: TextStyle(
+                                  fontSize: 16
+                                ))
                               ],
                             );
                           }

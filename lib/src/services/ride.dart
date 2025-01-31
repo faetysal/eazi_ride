@@ -36,7 +36,7 @@ class RideService extends GetxController {
 
   final Driver driver3 = Driver(
     name: 'Poly Nomial',
-    photo: 'assets/images/avatar-1.jpg',
+    photo: 'avatar-1.jpg',
     rating: 4,
     car: Car(
       name: 'Suzuki S-Presso',
@@ -50,7 +50,7 @@ class RideService extends GetxController {
 
   final Driver driver4 = Driver(
     name: 'Joe Bloggs',
-    photo: 'assets/images/avatar-2.jpg',
+    photo: 'avatar-2.jpg',
     rating: 3,
     car: Car(
       name: 'Toyota Corolla',
@@ -63,11 +63,11 @@ class RideService extends GetxController {
 
   final Driver driver5 = Driver(
     name: 'Jane Doe',
-    photo: 'assets/images/avatar-4.jpg',
+    photo: 'avatar-4.jpg',
     rating: 5,
     car: Car(
       name: 'Hyundai',
-      photo: '',
+      photo: 'hyundai.png',
       plate: 'AKD 345 IJ',
       color: 'White',
       type: CarType.coupe,
