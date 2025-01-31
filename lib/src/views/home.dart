@@ -17,9 +17,7 @@ import 'package:lottie/lottie.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Home extends StatelessWidget {
-
-
-  Home({super.key});
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {

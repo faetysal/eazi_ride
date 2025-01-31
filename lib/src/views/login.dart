@@ -3,6 +3,7 @@ import 'package:eazi_ride/src/components/input.dart';
 import 'package:eazi_ride/src/components/loader.dart';
 import 'package:eazi_ride/src/config.dart';
 import 'package:eazi_ride/src/models/user.dart';
+import 'package:eazi_ride/src/services/auth_manager.dart';
 import 'package:eazi_ride/src/services/popup_manager.dart';
 import 'package:eazi_ride/src/services/user.dart';
 import 'package:eazi_ride/src/views/home.dart';
@@ -163,6 +164,7 @@ class LoginController extends GetxController {
   late TextEditingController passwordCtrl;
 
   late UserService userService;
+  AuthManager authManager = Get.find();
 
   @override
   void onInit() {
@@ -195,6 +197,7 @@ class LoginController extends GetxController {
       }
 
       authenticating.value = false;
+      authManager.login(user.toMap());
       Get.off(Home(), id: 0);
     } else {
       validateMode.value = AutovalidateMode.onUserInteraction;
