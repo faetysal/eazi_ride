@@ -49,6 +49,7 @@ dependencies:
   flutter_env_native: ^0.1.0
   dart_define: ^2.1.1
   timeline_tile: ^2.0.0
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

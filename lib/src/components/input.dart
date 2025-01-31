@@ -13,6 +13,8 @@ class Input extends StatelessWidget {
   final bool readOnly;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
+  final Function(String)? onChanged;
+  final FocusNode? focusNode;
 
   const Input({
     super.key,
@@ -25,7 +27,9 @@ class Input extends StatelessWidget {
     this.obscureText = false,
     this.readOnly = false,
     this.inputFormatters,
-    this.keyboardType
+    this.keyboardType,
+    this.onChanged,
+    this.focusNode
   });
 
   @override
@@ -36,6 +40,8 @@ class Input extends StatelessWidget {
       obscureText: obscureText,
       readOnly: readOnly,
       cursorColor: colorBlack,
+      onChanged: onChanged,
+      focusNode: focusNode,
       decoration: InputDecoration(
         hintText: placeholder,
         prefixIcon: prefixIcon != null
